@@ -61,7 +61,9 @@ class Dataset(object):
     #: The dimensions of the dataset
     #:
     #: Note ``len(axes[i]) == shape[i]``.
-    shape = (65, 47, 3, 361, 720)
+    max_hours = int(os.getenv("MAX_FORECAST_HOURS", 192))
+    shape_hours = int(max_hours / 3 + 1)
+    shape = (shape_hours, 47, 3, 361, 720)
 
     # TODO: use the other levels too?
     # {10, 80, 100}m heightAboveGround (u, v)
