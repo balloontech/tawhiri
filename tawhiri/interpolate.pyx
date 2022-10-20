@@ -39,6 +39,8 @@ memory access.
 from magicmemoryview import MagicMemoryView
 from .warnings cimport WarningCounts
 
+import config
+
 
 # These need to match Dataset.axes.variable
 DEF VAR_A = 0
@@ -79,7 +81,7 @@ def make_interpolator(dataset, WarningCounts warnings):
     if warnings is None:
         raise TypeError("Warnings must not be None")
 
-    data = MagicMemoryView(dataset.array, (65, 47, 3, 361, 720), b"f")
+    data = MagicMemoryView(dataset.array, (config.SHAPE_HOURS, 47, 3, 361, 720), b"f")
 
     def f(hour, lat, lng, alt):
         return get_wind(data, warnings, hour, lat, lng, alt)
