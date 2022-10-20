@@ -151,7 +151,7 @@ cdef long pick3(double hour, double lat, double lng, Lerp3[8] out) except -1:
     # However, the longitude does wrap around, so we tell `pick` that the
     # longitude axis is one larger than it is (so that it can "choose" the
     # 721st point/the 360 degrees point), then wrap it afterwards.
-    pick(0, 3, 384, hour, "hour", lhour)
+    pick(0, 3, config.MAX_HOURS, hour, "hour", lhour)
     pick(-90, 0.5, 361, lat, "lat", llat)
     pick(0, 0.5, 720 + 1, lng, "lng", llng)
     if llng[1].index == 720:
