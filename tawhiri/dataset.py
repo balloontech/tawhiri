@@ -38,7 +38,7 @@ import operator
 from datetime import datetime
 import logging
 
-import config
+from .config import MAX_HOURS, SHAPE_HOURS
 
 logger = logging.getLogger("tawhiri.dataset")
 
@@ -63,7 +63,7 @@ class Dataset(object):
     #: The dimensions of the dataset
     #:
     #: Note ``len(axes[i]) == shape[i]``.
-    shape = (config.SHAPE_HOURS, 47, 3, 361, 720)
+    shape = (SHAPE_HOURS, 47, 3, 361, 720)
 
     # TODO: use the other levels too?
     # {10, 80, 100}m heightAboveGround (u, v)
@@ -89,7 +89,7 @@ class Dataset(object):
     #: For example, ``axes.pressure[4]`` is ``900`` - points in
     #: cells ``dataset.array[a][4][b][c][d]`` correspond to data at 900mb.
     axes = _axes_type(
-        range(0, config.MAX_HOURS + 3, 3),
+        range(0, MAX_HOURS + 3, 3),
         sorted(pressures_pgrb2f + pressures_pgrb2bf, reverse=True),
         ["height", "wind_u", "wind_v"],
         [x/2.0 for x in range(-180, 180 + 1)],
