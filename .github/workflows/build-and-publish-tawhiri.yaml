@@ -1,0 +1,14 @@
+name: Build and Publish Tawhiri Image
+on:
+  # workflow_dispatch allows the workflow to be triggered manually
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+jobs:
+  build-and-publish-image:
+    uses: ./.github/workflows/build-and-publish-image.yaml
+    with:
+      image-name: tawhiri
+      image-dir: "."
+    secrets: inherit
