@@ -25,7 +25,7 @@ import time
 import strict_rfc3339
 from io import BytesIO
 
-from tawhiri import solver, models
+from tawhiri import config, solver, models
 from tawhiri.dataset import Dataset as WindDataset
 from tawhiri.warnings import WarningCounts
 from tawhiri.csvformatter import format_csv, fix_data_longitudes
@@ -235,7 +235,8 @@ def parse_request_datasetcheck(data):
         raise InvalidDatasetException("Could not find any dataset.")
     except Exception as e:
         raise InvalidDatasetException("Could not find any dataset.")
-    
+
+    resp["forecast_hours"] = config.MAX_HOURS
     resp["warnings"] = warningcounts.to_dict()
 
     return resp
