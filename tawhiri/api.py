@@ -211,7 +211,7 @@ def parse_request_datasetcheck(data):
     """
     Dataset Check Request - try and find a dataset, any dataset, and return its info is there is one.
     """
-    req = {"version": API_VERSION}
+    req = {"version": API_VERSION, "forecast_hours": config.MAX_HOURS}
 
     # Response dict
     resp = {
@@ -236,7 +236,6 @@ def parse_request_datasetcheck(data):
     except Exception as e:
         raise InvalidDatasetException("Could not find any dataset.")
 
-    resp["forecast_hours"] = config.MAX_HOURS
     resp["warnings"] = warningcounts.to_dict()
 
     return resp
