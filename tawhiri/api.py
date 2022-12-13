@@ -418,6 +418,61 @@ def main():
         raise InternalException("Format not supported: " + response["request"]["format"])
 
 
+@app.route('/api/wind/', methods=['GET'])
+def get_wind():
+    """
+    Wind endpoint
+    """
+    g.request_start_time = time.time()
+    request_json = request.json
+
+    warningcounts = WarningCounts()
+
+    # Find wind data location
+    ds_dir = app.config.get('WIND_DATASET_DIR', WindDataset.DEFAULT_DIRECTORY)
+
+    # Dataset
+    request_dataset = request.args.get("dataset", LATEST_DATASET_KEYWORD)
+    try:
+        if request_dataset == LATEST_DATASET_KEYWORD:
+            tawhiri_ds = WindDataset.open_latest(persistent=True, directory=ds_dir)
+        else:
+            request_dataset_timestamp = _rfc3339_to_timestamp(request_dataset)
+            tawhiri_ds = WindDataset(datetime.fromtimestamp(request_dataset_timestamp), directory=ds_dir)
+    except IOError:
+        raise InvalidDatasetException("No matching dataset found.")
+    except ValueError as e:
+        raise InvalidDatasetException(*e.args)
+
+    wind_model = models.make_wind_velocity_uv(tawhiri_ds, warningcounts)
+
+    wind_speed_output = []
+    for wind_req in request_json:
+        raw_timestamp = wind_req["datetime"]
+        t = _rfc3339_to_timestamp(raw_timestamp)
+        lat = wind_req["latitude"]
+        lon = wind_req["longitude"]
+        alt = wind_req["altitude"]
+
+        u, v = wind_model(t, lat, lon, alt)
+
+        wind_speed_output.append({
+            "datetime": raw_timestamp,
+            "latitude": lat,
+            "longitude": lon,
+            "altitude": alt,
+            "u": u,
+            "v": v
+        })
+
+    g.request_complete_time = time.time()
+
+    response = {
+        "wind_speeds": wind_speed_output,
+        "metadata": _format_request_metadata()
+    }
+    return jsonify(response)
+
 
 @app.route('/api/ruaumoko/', methods=['GET'])
 def main_ruaumoko():
