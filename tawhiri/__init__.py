@@ -23,6 +23,6 @@ See http://www.cusf.co.uk/wiki/tawhiri:start for further details.
 
 __name__ = "tawhiri"
 __author__ = "Cambridge University Spaceflight <contact@cusf.co.uk>, Project Horus / Sondehub <vk5qi@rfhead.net>"
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 __version_info__ = tuple([int(d) for d in __version__.split(".")])
 __licence__ = "GPL v3"

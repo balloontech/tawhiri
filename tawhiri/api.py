@@ -418,7 +418,7 @@ def main():
         raise InternalException("Format not supported: " + response["request"]["format"])
 
 
-@app.route('/api/wind/', methods=['GET'])
+@app.route('/api/wind', methods=['POST'])
 def get_wind():
     """
     Wind endpoint
